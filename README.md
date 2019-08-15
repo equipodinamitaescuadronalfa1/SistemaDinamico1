@@ -2,9 +2,7 @@
 
 For running this program you need this line: "./testing.sh"
 
--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-
-## Introduccion
+## Introducción
 
 Un sistema dinámico es un sistema que varia con el tiempo. Estos pueden ser continuos o discretos.
 El siguiente proyecto modela el comportamiento de x = x^2 +1. Esta ecuacion es un sistema dinamico discreto.
