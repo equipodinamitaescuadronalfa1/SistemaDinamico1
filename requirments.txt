@@ -1,2 +1,4 @@
-Python version == Python3
+#python == Python3
 readcol.py
+matplotlib
+numpy
