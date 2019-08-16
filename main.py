@@ -2,28 +2,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pylab
+from sympy import *
+#from readcol import fgetcols
 
-def f(x):
-    return (x**2)+1
 
-def main():
-    conditions=[0.1,1,3]
-    
-    
-    vector=[]
-    for w in range(len(conditions)):
-        #print(len(conditions))
-        vec=[]
-        auxiar=conditions[w]
-        for d in range(10):
-            vec.append(auxiar)
-            auxiar=f(auxiar)
-        vector.append(vec)
-        
+def plotting(y1,y2,y3):
     fig, ax = plt.subplots()
-    ax.plot(vector[0], label="x=0.1")
-    ax.plot(vector[1], label="x=1")
-    ax.plot(vector[2], label="x=10")
+    ax.plot(y1, label="x=0.1")
+    ax.plot(y2, label="x=1")
+    ax.plot(y3, label="x=10")
     ax.set_yscale("log")
     ax.set(xlabel='i', ylabel='$x_i$',
            title="(x**2)+1")
@@ -32,10 +19,44 @@ def main():
     fig.savefig("test.png")
     plt.show()
     
+x=Symbol("x")
+
+with open ('formulae.dat') as f:
+    formulae=f.readlines()
+formulaestr=formulae[0]
+
+
+#formulae=fgetcols('formulae.dat')
+#strformulae=(formulae[0])[0]
+y=sympify(formulaestr)
+yprime=y.diff(x)
+f=lambdify(x,y,"numpy")
+
+
+
+
+
+range=range(7)
+z=0.1
+y1=[]
+y2=[]
+y3=[]
+for i in range:
+    z=f(z)
+    y1.append(z)
+z=1
+for i in range:
+    z=f(z)
+    y2.append(z)
+z=3
+for i in range:
+    z=f(z)
+    y3.append(z)
     
-main()
-    
-            
-    
+plotting(y1,y2,y3)
+
     
     
+    
+
+
