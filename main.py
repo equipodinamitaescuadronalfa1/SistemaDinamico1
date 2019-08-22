@@ -18,9 +18,7 @@ def plotting(y1,y2,y3,title):
     ax.grid()
     pylab.legend(loc='upper left')
     fig.savefig(title+".png")
-    plt.show()
-    
-x=Symbol("x")
+    #plt.show()
 
 
 n=len(sys.argv)
@@ -54,12 +52,10 @@ formulaestr=formulae[0]
 
 #formulae=fgetcols('formulae.dat')
 #strformulae=(formulae[0])[0]
+x=Symbol("x")
 y=sympify(formulaestr)
-yprime=y.diff(x)
+#yprime=y.diff(x)
 f=lambdify(x,y,"numpy")
-
-
-
 
 
 range=range(7)
@@ -70,19 +66,13 @@ y3=[]
 for i in range:
     z=f(z)
     y1.append(z)
-z=1
+z=1.0
 for i in range:
     z=f(z)
     y2.append(z)
-z=3
+z=10.0
 for i in range:
     z=f(z)
     y3.append(z)
     
 plotting(y1,y2,y3,formulaestr)
-
-    
-    
-    
-
-
