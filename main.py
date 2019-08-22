@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pylab
 from sympy import *
-import sys 
+import sys
+import ploter
 #from readcol import fgetcols
 
 
-def plotting(y1,y2,y3,title):
+'''def plotting(y1,y2,y3,title):
     fig, ax = plt.subplots()
     ax.plot(y1, label="x=0.1")
     ax.plot(y2, label="x=1")
@@ -18,7 +19,7 @@ def plotting(y1,y2,y3,title):
     ax.grid()
     pylab.legend(loc='upper left')
     fig.savefig(title+".png")
-    #plt.show()
+    plt.show()'''
 
 
 n=len(sys.argv)
@@ -59,20 +60,24 @@ f=lambdify(x,y,"numpy")
 
 
 range=range(7)
-z=0.1
 y1=[]
 y2=[]
 y3=[]
+
+with open('values.txt') as g:
+    v = g.readlines()
+    v = str(v[0]).split()
+z = float(v[0])
 for i in range:
     z=f(z)
     y1.append(z)
-z=1.0
+z = float(v[1])
 for i in range:
     z=f(z)
     y2.append(z)
-z=10.0
+z = float(v[2])
 for i in range:
     z=f(z)
     y3.append(z)
     
-plotting(y1,y2,y3,formulaestr)
+ploter.plotting(y1,y2,y3,formulaestr)
