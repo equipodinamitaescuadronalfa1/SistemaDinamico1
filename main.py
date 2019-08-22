@@ -23,27 +23,43 @@ import ploter
 
 
 n=len(sys.argv)
-file_flag=False
+
 ecuation_flag=False
 
-for i in range(n):
-    if '-f' in sys.argv[i]:
-        file_flag=True
-        filename=sys.argv[i+1]
-        
-    if '-e' in sys.argv[i]:
-        ecuation_flag=True
-        formulaestr= sys.argv[i+1]
+if n > 1:
+    if sys.argv[1] == '-f':
+        if n>2:
+            
+            filename=sys.argv[2]
+            
+            with open (filename) as f:
+                formulae=f.readlines()
+                formulaestr=formulae[0]
+            print("using file mode")
+        else:
+            print("No filename given check main.py -help for more information")
+            exit()
+           
+    elif sys.argv[1] == '-e':
+        if n>2:
+            ecuation_flag=True
+            print("using ecuation mode")
+            formulaestr= sys.argv[2]
+        else:
+            print("No ecuation given check main.py -help for more information")
+            exit()
+   
+    elif sys.argv[1] == '-help':
+        print("") #insertar aqui*******************************************************************************************************
+        exit()
+    else:
+        print("No method found check main.py -help for more information")
+        exit()
     
-if file_flag:
-    with open (filename) as f:
-        formulae=f.readlines()
-        formulaestr=formulae[0]
-        print("using file mode")
-elif ecuation_flag:
-    print("using ecuation mode")
-
-
+    
+else:
+    print("No parameters given check main.py -help for more information")
+    exit()
 
 '''
 with open ('formulae.dat') as f:
@@ -63,10 +79,14 @@ range=range(7)
 y1=[]
 y2=[]
 y3=[]
-
-with open('values.txt') as g:
-    v = g.readlines()
-    v = str(v[0]).split()
+try:
+    with open('values.txt') as g:
+        v = g.readlines()
+        v = str(v[0]).split()
+except:
+    print("No values found")
+    exit()
+    
 z = float(v[0])
 for i in range:
     z=f(z)
