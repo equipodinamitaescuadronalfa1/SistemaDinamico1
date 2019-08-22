@@ -100,4 +100,4 @@ for i in range:
     z=f(z)
     y3.append(z)
     
-ploter.plotting(y1,y2,y3,formulaestr)
+ploter.plotting(y1,y2,y3,formulaestr,float(v[0]),float(v[1]),float(v[2]))
