@@ -8,7 +8,8 @@ import ploter
 #from readcol import fgetcols
 
 
-'''def plotting(y1,y2,y3,title):
+'''
+def plotting(y1,title):
     fig, ax = plt.subplots()
     ax.plot(y1, label="x=0.1")
     ax.plot(y2, label="x=1")
@@ -19,13 +20,56 @@ import ploter
     ax.grid()
     pylab.legend(loc='upper left')
     fig.savefig(title+".png")
-    plt.show()'''
+    plt.show()
+'''
+
+def dynamic_system(formulae_str, a0, b0, n0, x0, N):
+    x,a,b,n = Symbol("x a b n")
+
+    y = sympify(formulae_str)
+    y.subs(a,a0)
+    y.subs(b,b0)
+    y,subs(n,n0)
+    y.subs(x,x0)
+
+    print(y)
+
+    #yprime = y.diff(x)
+    f=lambdify(x,y,"numpy")
+
+    # Data for plotting
+    iterations = range(N)
+    z = x0
+    y1 = []
+    for i in iterations:
+        z = f(z)
+        y1.append(z)
+
+    return y1
 
 
 n=len(sys.argv)
 
 ecuation_flag=False
 
+
+for i in range(n):
+    if '-a' in sys.argv[i]:
+        a0=float(sys.argv[i+1])
+    if '-b' in sys.argv[i]:
+        b0=float(sys.argv[i+1])
+    if '-x0' in sys.argv[i]:
+        x0=float(sys.argv[i+1])
+    if '-n' in sysargv[i]:
+        n0=float(sys.argv[i+1])
+    if '-f' in sys.argv[i]:
+        file_flag=True
+        filename=sys.argv[i+1]
+    if '-e' in sys.argv[i]:
+        equation_flag=True
+        formulae_str=sys.argv[i+1]
+
+'''
 if n > 1:
     if sys.argv[1] == '-f':
         if n>2:
@@ -61,7 +105,7 @@ else:
     print("No parameters given check main.py -help for more information")
     exit()
 
-'''
+
 with open ('formulae.dat') as f:
     formulae=f.readlines()
 formulaestr=formulae[0]
