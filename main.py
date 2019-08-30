@@ -200,14 +200,17 @@ import sys
 #./dynamic.py -e a*x^n+b -a 1 10 1  -b 1 5 1 -n 2 3 1 -x0 0.1 1.0 0.1 -i 6
 #from readcol import fgetcols
 
-def plotting(fig,ax,y1,title,filename,caption):
-    ax.plot(y1,label=caption)
-    #ax.plot(y2,label='x=1.0')
-    #ax.plot(y3,label='x=10.0')
-    ax.set_yscale('log')
-    ax.set(xlabel='i', ylabel='$x_i$',
+def plotting(fig,ax,time,y1,title,filename,caption):
+    ax.plot(time,y1,label=caption)
+    
+    
+    #ax.set_yscale('log')
+    ax.set(xlabel='Hours', ylabel='g',
            title=title)
     ax.grid()
+    
+    
+    
     #plt.show()
 
 def dynamic_system(formulae_str,a0,b0,n0,x0,N):
@@ -227,11 +230,19 @@ def dynamic_system(formulae_str,a0,b0,n0,x0,N):
     iterations = range(N)
     z = x0
     y1 = []
+    time=[]
+    mitosis = 3.0 #Hours
+    dtime = 0.0
+    
+    weight=1e-12#g
+    
     for i in iterations:
+        time.append(dtime)
+        dtime+=mitosis
         z = f(z)
-        y1.append(z)
+        y1.append(z*weight)
         
-    return y1
+    return y1,time
     
     
 #formulae='x^2+1.0'
@@ -335,10 +346,10 @@ for a in A:
     for b in B:
         for n in N:
             for x0 in X0:
-                y1 = dynamic_system(formulae_str,a,b,n,x0,itera)
+                y1,time = dynamic_system(formulae_str,a,b,n,x0,itera)
                 filename=formulae_str+"_a"+str(a)+"_b"+str(b)+"_n"+str(itera)+"_x0"+str(x0)+"_i"+str(n)+".png"
                 caption = "a="+str(a)+" b="+str(b)+" n="+str(n)+" x0="+str(x0)+" i="+str(itera)
-                plotting(fig,ax,y1,formulae_str,filename,caption)
+                plotting(fig,ax,time,y1,formulae_str,filename,caption)
 plt.show()
 fig.savefig(filename)
 
