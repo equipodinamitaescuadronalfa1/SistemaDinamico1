@@ -243,6 +243,38 @@ def dynamic_system(formulae_str,a0,b0,n0,x0,N):
         y1.append(z*weight)
         
     return y1,time
+
+def function_system(formulae_str,a0,b0,n0,x0):
+    x,a,b,n = symbols("x a b n")
+    print(a0,b0,n0,x0)
+    y = sympify(formulae_str)
+    y = y.subs(a,a0)
+    y = y.subs(b,b0)
+    y = y.subs(n,n0)
+
+    print(y)
+    
+    #yprime = y.diff(x)
+    f=lambdify(x,y,"numpy")
+
+    # Data for plotting
+    #iterations = range(N)
+    #z = x0
+    #y1 = []
+    #time=[]
+    #mitosis = 3.0 #Hours
+    #dtime = 0.0
+    #weight=1e-12#g
+    
+    y1 = f(x0)
+    
+    #for i in iterations:
+    #    time.append(dtime)
+    #    dtime+=mitosis
+    #    z = f(z)
+    #    y1.append(z*weight)
+        
+    return y1,x0
     
     
 #formulae='x^2+1.0'
@@ -256,6 +288,7 @@ def dynamic_system(formulae_str,a0,b0,n0,x0,N):
 
 file_flag = False
 equation_flag = False
+dynamic_flag = False
 formulae_str = 'x'
 x0=a0=b0=n0=1.0
 x1=a1=b1=n1=1.0
@@ -319,7 +352,9 @@ for i in range(n):
     if  '-e' in sys.argv[i]:
         equation_flag=True
         formulae_str=sys.argv[i+1]
-       
+
+    if '-dynamic' in sys.argv[i]:
+        dynamic_flag=True
         
 if file_flag:
     with open(filename) as f:
@@ -330,6 +365,8 @@ if file_flag:
 if equation_flag:
     print('Using equation mode with '+formulae_str)
 
+if dynamic_flag:
+    print('Using dynamic mode')
 
 A = np.arange(a0,a1,da)
 B = np.arange(b0,b1,db)
@@ -345,11 +382,15 @@ fig, ax = plt.subplots()
 for a in A:
     for b in B:
         for n in N:
-            for x0 in X0:
+            if dynamic_flag:
+                for x0 in X0:
                 y1,time = dynamic_system(formulae_str,a,b,n,x0,itera)
                 filename=formulae_str+"_a"+str(a)+"_b"+str(b)+"_n"+str(itera)+"_x0"+str(x0)+"_i"+str(n)+".png"
                 caption = "a="+str(a)+" b="+str(b)+" n="+str(n)+" x0="+str(x0)+" i="+str(itera)
                 plotting(fig,ax,time,y1,formulae_str,filename,caption)
+            else:
+            y1,time = function_system(formulae_str,a,b,n,X0)
+
 plt.show()
 fig.savefig(filename)
 
