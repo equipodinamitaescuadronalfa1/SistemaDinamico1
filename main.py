@@ -188,12 +188,17 @@ for i in range:
 #!/usr/bin/env python3
 
 #from graphics import plotting
+
+
+
+
 from sympy import *
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pylab
 import sys
+import random
 
 #./dynamic -f formulae.dat
 # USAGE
@@ -244,7 +249,7 @@ def dynamic_system(formulae_str,a0,b0,n0,x0,N):
         
     return y1,time
 
-def function_system(formulae_str,a0,b0,n0,x0):
+def function_system(formulae_str,a0,b0,n0,x0,snoize):
     x,a,b,n = symbols("x a b n")
     print(a0,b0,n0,x0)
     y = sympify(formulae_str)
@@ -266,7 +271,12 @@ def function_system(formulae_str,a0,b0,n0,x0):
     #dtime = 0.0
     #weight=1e-12#g
     
+    
+    
     y1 = f(x0)
+    
+    for w in range(len(y1)):
+        y1[w]=y1[w]+ (random.random() * snoize)
     
     #for i in iterations:
     #    time.append(dtime)
@@ -289,6 +299,10 @@ def function_system(formulae_str,a0,b0,n0,x0):
 file_flag = False
 equation_flag = False
 dynamic_flag = False
+snoize_flag = False
+snoize = 0
+
+
 formulae_str = 'x'
 x0=a0=b0=n0=1.0
 x1=a1=b1=n1=1.0
@@ -355,6 +369,15 @@ for i in range(n):
 
     if '-dynamic' in sys.argv[i]:
         dynamic_flag=True
+    
+    if  '-snoize' in sys.argv[i]:
+        #file_flag=True
+        #x0=float(sys.argv[i+1])
+        snoize_flag = True
+        i+=1
+        snoize=float(sys.argv[i])
+    
+    
         
 if file_flag:
     with open(filename) as f:
@@ -367,6 +390,9 @@ if equation_flag:
 
 if dynamic_flag:
     print('Using dynamic mode')
+    
+if snoize_flag:
+    print('Adding noize')
 
 A = np.arange(a0,a1,da)
 B = np.arange(b0,b1,db)
@@ -384,12 +410,16 @@ for a in A:
         for n in N:
             if dynamic_flag:
                 for x0 in X0:
-                y1,time = dynamic_system(formulae_str,a,b,n,x0,itera)
+                    y1,time = dynamic_system(formulae_str,a,b,n,x0,itera)
+                    filename=formulae_str+"_a"+str(a)+"_b"+str(b)+"_n"+str(itera)+"_x0"+str(x0)+"_i"+str(n)+".png"
+                    caption = "a="+str(a)+" b="+str(b)+" n="+str(n)+" x0="+str(x0)+" i="+str(itera)
+                    plotting(fig,ax,time,y1,formulae_str,filename,caption)
+            else:
+                y1,time = function_system(formulae_str,a,b,n,X0,snoize)
+                
                 filename=formulae_str+"_a"+str(a)+"_b"+str(b)+"_n"+str(itera)+"_x0"+str(x0)+"_i"+str(n)+".png"
                 caption = "a="+str(a)+" b="+str(b)+" n="+str(n)+" x0="+str(x0)+" i="+str(itera)
                 plotting(fig,ax,time,y1,formulae_str,filename,caption)
-            else:
-            y1,time = function_system(formulae_str,a,b,n,X0)
 
 plt.show()
 fig.savefig(filename)
